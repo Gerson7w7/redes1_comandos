@@ -1,0 +1,57 @@
+! este switch a diferencia del switch l2 es que puede hacer sub-interfaces para 
+! las vlans y que cada vlan tenga su propio enlace predetermiado
+! y conectarse entre vlans.
+
+hostname NUCLEO1
+interface range e0/0-3
+duplex full 
+!poner en modo trunk 
+exit
+! Crear vtp REDES1 
+vlan 2
+name COMPUTERS 
+exit
+vlan 3
+name VoIP
+exit 
+vlan 4 
+name CAMERAS 
+exit 
+
+interface vlan 2 
+description COMPUTERS 
+ip address 192.168.20.254 255.255.255.0
+no shutdown
+exit 
+interface vlan 3
+description VoIP
+ip address 192.168.30.254 255.255.255.0
+no shutdown
+exit
+interface vlan 4
+description CAMERAS 
+ip address 192.168.40.254 255.255.255.0
+no shutdown
+exit 
+show ip interface brief 
+do write 
+
+! las puertas de enlaces de cada vlan como de las vpcs de una vlan en
+! particular son las mismas.
+Vpc vlan 2: ip 192.168.20.10/24 192.168.20.254
+Vpc vlan 3: ip 192.168.30.10/24 192.168.30.254
+Vpc vlan 4: ip 192.168.40.10/24 192.168.40.254
+
+spanning-tree vlan 1 root primary 
+spanning-tree vlan 2 root primary 
+spanning-tree vlan 3 root primary 
+spanning-tree vlan 4 root primary 
+spanning-tree mode ?
+spanning-tree vlan 2
+
+! por defecto todos los switchs traen ip routing, solo el nucleo switch capa 3 
+! debería tener ruteo.
+show cdp neighbors 
+no ip routing ! En todos menos en el núcleo 
+exit 
+show interface status

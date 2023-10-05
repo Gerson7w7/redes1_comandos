@@ -1,0 +1,49 @@
+! esta configuración se hará solo para 2 routers conectados
+! la vpcs que tengan asociados tendrán que tener la misma puerta de enlace 
+! ej: ip 192.168.0.2/24 192.168.0.1
+! red de la vpc 192.168.0.0/24
+! ROUTER 1
+enable 
+configure terminal
+hostname R1
+! interface de la red de la vpc
+interface e0/1 !puerto que va al switch 
+ip address 192.168.0.1 255.255.255.0
+no shutdown
+
+! ahora configuramos la interface de la red entre routers
+interface e0/0 !puerto que va al otro router o routers
+ip address 11.0.0.1 255.255.255.0
+no shutdown
+
+! para hacer ruteo entre routers
+ip route 10.0.0.0 255.255.255.0 11.0.0.2
+! red a donde se quiere ir, mascara de red, ip por donde pasará a la red deseada
+ip route 11.0.0.0 255.255.255.0 11.0.0.2
+
+show ip route
+show running-config
+
+! ==============================================================================
+! red de la vpc 10.0.0.0/24
+! ROUTER 2
+enable 
+configure terminal
+hostname R2
+! interface de la red de la vpc
+interface e0/1 !puerto que va al switch 
+ip address 10.0.0.1 255.255.255.0 ! en vpc: ip 10.0.0.2/24 10.0.0.1
+no shutdown
+
+! ahora configuramos la interface de la red entre routers
+interface e0/0 !puerto que va al otro router o routers
+ip address 11.0.0.2 255.255.255.0
+no shutdown
+
+! para hacer ruteo entre routers
+ip route 192.168.0.0 255.255.255.0 11.0.0.1
+! red a donde se quiere ir, mascara de red, ip por donde pasará a la red deseada
+ip route 11.0.0.0 255.255.255.0 11.0.0.1
+
+show ip route
+show running-config

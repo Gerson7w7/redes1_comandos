@@ -1,0 +1,28 @@
+! esta configuración deberá hacerce en los 2 switch que estén implicados el
+! port-channel SW1=====SW2
+! LACP
+interface Port-channel 1
+description LACP
+exit
+interface range e0/0-1 ! los conjuntos de puertos que vayan al mismo switch
+channel-group 1 mode active ! puede ser: passive u on = modo estático
+! minimo 1 en passive
+! definir también modo troncal, acceso, etc. 
+exit
+
+! PAGP
+interface Port-channel 1
+description PAGP
+exit
+interface range e0/0-1
+channel-group 1 mode desirable ! puede ser: auto u on = modo estáticos
+! minimo 1 en desirable
+! definir también modo troncal, acceso, etc. 
+exit
+
+! verificación 
+show ethercahnnel summary 
+show run interface 1 ! interface del port channel
+show interfaces 1 switchport 
+show lacp neighbor ! puede ser: pagp 
+show running-config

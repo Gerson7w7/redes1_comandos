@@ -1,0 +1,116 @@
+! ======================= red de vpc: 10.0.0.0/24 ===============================
+! ip router 1 hacia switch: 10.0.0.2
+! ip router 2 hacia switch: 10.0.0.3
+! ip virtual: 10.0.0.1
+! ip vpc: ip 10.0.0.4/24 10.0.0.1
+
+! ============================= ROUTER 1 ====================================
+enable 
+configure terminal
+hostname R1
+! interface de la red de la vpc
+interface e0/0 !puerto que va al switch 
+ip address 10.0.0.2 255.255.255.0
+no shutdown
+
+! protocolo HSRP
+standby 1 ip 10.0.0.1 ! ip virtual
+standby version 2
+standby priority 109 ! 0-255, no es necesario
+standby preempt ! solo para el router principal
+exit
+show standby
+
+! ahora configuramos la interface de la red entre routers
+interface e0/1 !puerto que va al otro router o routers
+ip address 12.0.0.1 255.255.255.248
+no shutdown
+
+! para hacer ruteo entre routers
+ip route 11.0.0.0 255.255.255.0 12.0.0.2
+ip route 12.0.0.0 255.255.255.248 12.0.0.2
+ip route 13.0.0.0 255.255.255.248 10.0.0.3
+
+! ============================= ROUTER 2 ====================================
+enable 
+configure terminal
+hostname R2
+! interface de la red de la vpc
+interface e0/0 !puerto que va al switch 
+ip address 10.0.0.3 255.255.255.0
+no shutdown
+
+! protocolo HSRP
+standby 1 ip 10.0.0.1 ! ip virtual
+standby version 2
+standby priority 109 ! 0-255, no es necesario
+exit
+
+! ahora configuramos la interface de la red entre routers
+interface e0/1 !puerto que va al otro router o routers
+ip address 13.0.0.1 255.255.255.248
+no shutdown
+
+! para hacer ruteo entre routers
+ip route 11.0.0.0 255.255.255.0 13.0.0.2
+ip route 12.0.0.0 255.255.255.248 10.0.0.2
+ip route 13.0.0.0 255.255.255.248 13.0.0.2
+
+
+
+
+! ======================= red de vpc: 11.0.0.0/24 ===============================
+! ip router 3 hacia switch: 11.0.0.2
+! ip router 4 hacia switch: 11.0.0.3
+! ip virtual: 11.0.0.1
+! ip vpc: ip 11.0.0.4/24 11.0.0.1
+
+! ============================= ROUTER 3 ====================================
+enable 
+configure terminal
+hostname R3
+! interface de la red de la vpc
+interface e0/0 !puerto que va al switch 
+ip address 11.0.0.2 255.255.255.0
+no shutdown
+
+! protocolo GLBP
+glbp 1 ip 11.0.0.1 ! ip virtual
+glbp 1 preempt ! solo para el router principal
+glbp 1 priority 200 ! 1-255, no es necesario
+glbp 1 load-balancing round-robin
+exit
+
+show glbp ! informacion sobre el protocolo
+
+! ahora configuramos la interface de la red entre routers
+interface e0/1 !puerto que va al otro router o routers
+ip address 12.0.0.2 255.255.255.248
+no shutdown
+
+! para hacer ruteo entre routers
+ip route 10.0.0.0 255.255.255.0 12.0.0.1
+ip route 12.0.0.0 255.255.255.248 12.0.0.1
+ip route 13.0.0.0 255.255.255.248 11.0.0.3
+
+! ============================= ROUTER 4 ====================================
+enable 
+configure terminal
+hostname R4
+! interface de la red de la vpc
+interface e0/0 !puerto que va al switch 
+ip address 11.0.0.3 255.255.255.0
+no shutdown
+
+! protocolo GLBP
+glbp 1 ip 11.0.0.1 ! ip virtual
+glbp 1 load-balancing round-robin
+exit
+
+! para hacer ruteo entre routers
+ip route 10.0.0.0 255.255.255.0 13.0.0.1
+ip route 12.0.0.0 255.255.255.248 11.0.0.2
+ip route 13.0.0.0 255.255.255.248 13.0.0.1
+
+! ======================= red entre R1 y R3 12.0.0.0/28 =========================
+! ======================= red entre R2 y R4 13.0.0.0/28 =========================

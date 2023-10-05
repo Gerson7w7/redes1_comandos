@@ -1,0 +1,63 @@
+// switch servidor (S1)
+enable
+configure terminal
+hostname S1
+vlan 10
+name Docentes
+exit
+vlan 20
+name Estudiantes
+exit
+vlan 30
+name Visitantes
+exit
+vlan 99
+name Nativa
+exit
+vlan 100
+name Blackhole
+exit
+// configuracion de vtp para servidor 
+vtp version 2
+vtp mode server
+vtp domain pareja23
+vtp password redes1
+// poner el modo truncal 
+interface range e0/0-1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+// switchport trunk allowed vlan x1,x2,x3,...
+switchport trunk native vlan 99
+
+
+
+// switch clientes (S2 y S3)
+enable
+configure terminal
+hostname S2 // S3 para el switch 3
+vtp version 2
+vtp mode client
+vtp domain pareja23
+vtp password redes1
+do write
+// modo truncal
+interface e0/0
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+exit
+// modo acceso
+interface e0/1
+switchport mode access
+switchport access vlan 10
+exit
+interface e0/2
+switchport mode access
+switchport access vlan 20
+exit
+interface e0/3
+switchport mode access
+switchport access vlan 30
+exit
+do write
+show vtp status
