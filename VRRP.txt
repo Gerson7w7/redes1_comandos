@@ -1,0 +1,27 @@
+! protocolo de redundancia VRRP 
+! ROUTER MASTER
+interface e0/0
+vrrp 10 ip 192.168.10.254
+vrrp 10 description VLAN10
+vrrp 10 priority 130
+vrrp 10 preempt
+exit
+do show running-config
+do show vrrp
+do show vrrp brief
+! configuración inicial
+interface e0/0
+vrrp 10 authentication redes1 ! seguridad
+
+
+
+! ROUTER BACKUP
+interface e0/0
+vrrp 10 ip 192.168.10.254
+vrrp 10 description VLAN10
+vrrp 10 priority 120
+exit
+do show running-config
+! configuración inicial
+interface e0/0
+vrrp 10 authentication redes1 ! seguridad
