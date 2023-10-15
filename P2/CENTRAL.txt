@@ -1,0 +1,139 @@
+! SWC
+enable
+configure terminal
+hostname SWC
+vlan 13
+name ACADEMICO
+exit
+vlan 23
+name INVESTIGACION
+exit
+vlan 33
+name ADMINISTRACION 
+exit
+vlan 43
+name SEGURIDAD
+exit
+vtp version 2
+vtp mode server
+vtp domain pareja23
+vtp password redes1
+interface range e0/0-3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+interface range e1/0-3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+spanning-tree mode rapid-pvst
+spanning-tree vlan 13,23,33,43
+spanning-tree vlan 13,23,33,43 root primary
+interface Port-channel 1
+description HaciaSW1_PAGP
+exit
+interface range e0/1-2
+channel-group 1 mode auto
+exit
+interface Port-channel 2
+description HaciaSW2_PAGP
+exit
+interface e0/3
+channel-group 2 mode auto
+exit
+interface e1/0
+channel-group 2 mode auto
+exit
+do write
+
+! SW1
+enable
+configure terminal
+hostname SW1
+vtp version 2
+vtp mode client
+vtp domain pareja23
+vtp password redes1
+interface range e0/2-3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+interface range e1/0-3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+interface range e0/0
+switchport mode access
+switchport access vlan 33
+exit
+interface range e0/1
+switchport mode access
+switchport access vlan 13
+exit
+spanning-tree mode rapid-pvst
+spanning-tree vlan 13,23,33,43
+interface Port-channel 1
+description HaciaSWC_PAGP
+exit
+interface e0/3
+channel-group 1 mode desirable 
+exit
+interface e1/0
+channel-group 1 mode desirable 
+exit
+interface Port-channel 2
+description HaciaSW2_PAGP
+exit
+interface e0/2
+channel-group 2 mode auto
+exit
+interface e1/1
+channel-group 2 mode auto
+exit
+do write
+
+! SW2
+enable
+configure terminal
+hostname SW2
+vtp version 2
+vtp mode client
+vtp domain pareja23
+vtp password redes1
+interface range e0/0-1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+interface range e1/0-3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+exit
+interface range e0/2
+switchport mode access
+switchport access vlan 23
+exit
+interface range e0/3
+switchport mode access
+switchport access vlan 43
+exit
+spanning-tree mode rapid-pvst
+spanning-tree vlan 13,23,33,43
+interface Port-channel 1
+description HaciaSWC_PAGP
+exit
+interface e0/0
+channel-group 1 mode desirable 
+exit
+interface range e1/1
+channel-group 1 mode desirable 
+exit
+interface Port-channel 2
+description HaciaSW1_PAGP
+exit
+interface e0/1
+channel-group 2 mode desirable 
+exit
+interface e1/0
+channel-group 2 mode desirable 
+exit
+do write

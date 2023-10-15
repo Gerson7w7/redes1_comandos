@@ -1,4 +1,4 @@
-! esta configuración deberá hacerce en los 2 switch que estén implicados el
+﻿! esta configuración deberá hacerce en los 2 switch que estén implicados el
 ! port-channel SW1=====SW2
 ! LACP
 interface Port-channel 1
