@@ -16,8 +16,8 @@ no shutdown
 ! protocolo HSRP
 standby 1 ip 10.0.0.1 ! ip virtual
 standby version 2
-standby priority 109 ! 0-255, no es necesario
-standby preempt ! solo para el router principal
+standby 1 priority 109 ! 0-255, no es necesario
+standby 1 preempt ! solo para el router principal
 exit
 show standby
 
@@ -43,7 +43,7 @@ no shutdown
 ! protocolo HSRP
 standby 1 ip 10.0.0.1 ! ip virtual
 standby version 2
-standby priority 109 ! 0-255, no es necesario
+standby 1 priority 109 ! 0-255, no es necesario
 exit
 
 ! ahora configuramos la interface de la red entre routers

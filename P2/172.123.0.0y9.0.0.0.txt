@@ -1,0 +1,33 @@
+! C_1
+enable 
+configure terminal
+hostname C_1
+interface e0/0 
+ip address 172.123.0.2 255.255.255.248
+no shutdown
+standby version 2
+standby 1 ip 172.123.0.1
+standby 1 priority 150
+standby 1 preempt 
+exit
+interface s1/0 
+ip address 9.0.0.1 255.255.255.252
+no shutdown
+exit
+do write
+
+! C_2
+enable 
+configure terminal
+hostname C_2
+interface e0/0 
+ip address 172.123.0.3 255.255.255.248
+no shutdown
+standby 1 ip 172.123.0.1
+standby version 2
+exit
+interface s1/0 
+ip address 9.0.0.5 255.255.255.252
+no shutdown
+exit
+do write
