@@ -62,11 +62,11 @@ interface range e1/0-3
 switchport trunk encapsulation dot1q
 switchport mode trunk
 exit
-interface range e0/0
+interface e0/0
 switchport mode access
 switchport access vlan 33
 exit
-interface range e0/1
+interface e0/1
 switchport mode access
 switchport access vlan 13
 exit
@@ -108,11 +108,11 @@ interface range e1/0-3
 switchport trunk encapsulation dot1q
 switchport mode trunk
 exit
-interface range e0/2
+interface e0/2
 switchport mode access
 switchport access vlan 23
 exit
-interface range e0/3
+interface e0/3
 switchport mode access
 switchport access vlan 43
 exit
@@ -124,7 +124,7 @@ exit
 interface e0/0
 channel-group 1 mode desirable 
 exit
-interface range e1/1
+interface e1/1
 channel-group 1 mode desirable 
 exit
 interface Port-channel 2
@@ -136,4 +136,32 @@ exit
 interface e1/0
 channel-group 2 mode desirable 
 exit
+do write
+
+! ROUTER R
+enable 
+configure terminal
+hostname R
+interface e0/0
+no shutdown
+exit
+interface e0/0.13 
+encapsulation dot1Q 13
+ip address 172.123.2.1 255.255.255.224
+exit
+interface e0/0.23
+encapsulation dot1Q 23
+ip address 172.123.2.33 255.255.255.240
+exit
+interface e0/0.33
+encapsulation dot1Q 33
+ip address 172.123.2.49 255.255.255.240
+exit
+interface e0/0.43
+encapsulation dot1Q 43
+ip address 172.123.2.65 255.255.255.248
+exit
+interface e0/1
+ip address 172.123.0.4 255.255.255.248
+no shutdown
 do write
