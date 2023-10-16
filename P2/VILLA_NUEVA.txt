@@ -65,6 +65,11 @@ ip address 173.123.2.49 255.255.255.240
 no shutdown
 exit 
 ip routing
+interface e0/0
+switchport trunk encapsulation dot1q
+switchport mode trunk
+no shutdown
+exit
 do write
 
 ! SW4
