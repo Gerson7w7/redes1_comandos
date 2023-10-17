@@ -1,0 +1,57 @@
+! CENTRAL
+enable 
+configure terminal
+hostname CENTRAL
+interface s1/0
+ip address 9.0.0.2 255.255.255.252
+no shutdown 
+exit
+interface s1/1
+ip address 9.0.0.6 255.255.255.252
+no shutdown 
+exit
+interface s1/2
+ip address 10.0.0.1 255.255.255.252
+no shutdown 
+exit
+interface s1/3
+ip address 10.0.0.5 255.255.255.252
+no shutdown 
+exit
+do write
+
+! MIXCO
+enable 
+configure terminal
+hostname MIXCO
+interface s1/0
+ip address 10.0.0.2 255.255.255.252
+no shutdown 
+exit
+interface s1/1
+ip address 10.0.0.9 255.255.255.252
+no shutdown 
+exit
+do write
+
+! VILLA NUEVA
+enable 
+configure terminal
+hostname VILLA_NUEVA
+interface s1/0
+ip address 10.0.0.6 255.255.255.252
+no shutdown 
+exit
+interface s1/1
+ip address 10.0.0.10 255.255.255.252
+no shutdown 
+exit
+interface s1/2
+ip address 11.0.0.6 255.255.255.252
+no shutdown 
+exit
+interface s1/3
+ip address 11.0.0.2 255.255.255.252
+no shutdown 
+exit
+do write

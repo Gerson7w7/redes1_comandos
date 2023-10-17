@@ -1,0 +1,33 @@
+! VN_1
+enable 
+configure terminal
+hostname VN_1
+interface e0/0 
+ip address 173.123.0.2 255.255.255.248
+no shutdown
+glbp 1 ip 173.123.0.1
+glbp 1 preempt 
+glbp 1 priority 150
+glbp 1 load-balancing round-robin
+exit
+interface s1/0 
+ip address 11.0.0.1 255.255.255.252
+no shutdown
+exit
+do write
+
+! VN_2
+enable 
+configure terminal
+hostname VN_2
+interface e0/0 
+ip address 173.123.0.3 255.255.255.248
+no shutdown
+glbp 1 ip 173.123.0.1
+glbp 1 load-balancing round-robin
+exit
+interface s1/0 
+ip address 11.0.0.5 255.255.255.252
+no shutdown
+exit
+do write
